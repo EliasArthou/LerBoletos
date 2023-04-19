@@ -60,18 +60,18 @@ def listarcodigobarras(visual, caminho):
     pdfs = [i for i in os.listdir(caminho) if '.pdf' in i]
     dados = []
     cabecalho = ['Cliente', 'Código de Barras', 'Tipo Código de Barras', 'Nome do Arquivo', 'Linha Digitável']
-
-    for indice, boletos in enumerate(pdfs):
-        # ===================================== Parte Gráfica =======================================================
-        visual.mudartexto('labelcodigocliente', 'Arquivo: ' + boletos.replace('.pdf', ''))
-        visual.mudartexto('labelquantidade', 'Item ' + str(indice + 1) + ' de ' + str(len(pdfs)) + '...')
-        visual.mudartexto('labelstatus', 'Extraindo Código de Barras...')
-        # Atualiza a barra de progresso das transações (Views)
-        visual.configurarbarra('barraextracao', len(pdfs), indice + 1)
-        time.sleep(0.1)
-        # ===================================== Parte Gráfica =======================================================
-        teste = barcodereader(caminho, boletos, cabecalho)
-        dados.append(teste)
+    if pdfs:
+        for indice, boletos in enumerate(pdfs):
+            # ===================================== Parte Gráfica =======================================================
+            visual.mudartexto('labelcodigocliente', 'Arquivo: ' + boletos.replace('.pdf', ''))
+            visual.mudartexto('labelquantidade', 'Item ' + str(indice + 1) + ' de ' + str(len(pdfs)) + '...')
+            visual.mudartexto('labelstatus', 'Extraindo Código de Barras...')
+            # Atualiza a barra de progresso das transações (Views)
+            visual.configurarbarra('barraextracao', len(pdfs), indice + 1)
+            time.sleep(0.1)
+            # ===================================== Parte Gráfica =======================================================
+            teste = barcodereader(caminho, boletos, cabecalho)
+            dados.append(teste)
     if len(dados) > 0:
         retorno = dados
     else:
@@ -81,7 +81,6 @@ def listarcodigobarras(visual, caminho):
 
 
 def importar_boletos(visual):
-    import auxiliares as aux
     import messagebox
 
     salvouarquivo = False
@@ -90,7 +89,7 @@ def importar_boletos(visual):
 
     if len(arquivo_caminho_origem) > 0:
         listaexcel = listarcodigobarras(visual, arquivo_caminho_origem)
-        if len(listaexcel) > 0:
+        if listaexcel:
             visual.mudartexto('labelstatus', 'Salvando Arquivo...')
             if len(local_destino) > 0:
                 nomearquivo = os.path.join(local_destino, 'Log_' + aux.acertardataatual() + '.xlsx')
