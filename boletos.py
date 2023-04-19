@@ -7,7 +7,9 @@ import auxiliares as aux
 def barcodereader(pdf_path, pdffile, cabecalho):
     try:
         completepath = os.path.join(pdf_path, pdffile)
-        pages = convert_from_path(completepath, 300, poppler_path=r'C:\Users\oi234957\PycharmProjects\Ler Boletos\poppler-23.01.0\library\bin')
+
+        caminhpoppler = aux.caminhoprojeto() + r'\poppler-23.01.0\library\bin'
+        pages = convert_from_path(completepath, 300, poppler_path=caminhpoppler)
         for pagina in pages:
             infocodigobarras = decode(pagina)
             if infocodigobarras:
